@@ -4,9 +4,10 @@ interface FieldProps {
     type: string;
     name: string;
     placeholder: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Field: React.FC<FieldProps> = ({ type, name, placeholder }) => {
+const Field: React.FC<FieldProps> = ({ type, name, placeholder, onChange }) => {
     return (
 
         <input
@@ -15,6 +16,7 @@ const Field: React.FC<FieldProps> = ({ type, name, placeholder }) => {
             id={name}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             placeholder={placeholder}
+            onChange={onChange}
         />
     );
 };

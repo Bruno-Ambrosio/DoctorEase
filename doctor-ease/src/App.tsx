@@ -1,16 +1,17 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LoginPage from './pages/public/LoginPage';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastProvider } from './context/ToastContext';
+import { AuthProvider } from './context/AuthContext';
+import Routes from './routes/Routes';
 
 const App: React.FC = () => {
   return (
     <ToastProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes />
+        </Router>
+      </AuthProvider>
     </ToastProvider>
   );
 };

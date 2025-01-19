@@ -1,4 +1,4 @@
-import { UserProps } from "./UserProps";
+import { UserProps } from './UserProps';
 
 export interface AuthProps {
     token: string | null;

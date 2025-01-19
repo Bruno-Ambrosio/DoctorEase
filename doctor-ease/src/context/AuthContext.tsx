@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState, ReactNode } from 'react';
-import { AUTH_TOKEN_NAME } from '../constants.ts';
-import { UserProps } from '../global_props/UserProps.tsx';
-import { AuthProps } from '../global_props/AuthProps.tsx';
+import { InternalConstants } from '../constants/InternalConstants.ts';
+import { UserProps } from '../props/global_props/UserProps.tsx';
+import { AuthProps } from '../props/global_props/AuthProps.tsx';
 import { getCookie, setCookie, removeCookie } from '../utils/Cookies.tsx';
 
 const AuthContext = createContext<AuthProps | undefined>(undefined);
@@ -16,7 +16,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const storedToken: string | null = localStorage.getItem(AUTH_TOKEN_NAME);
+        const storedToken = getToken();
         if (storedToken) {
             setToken(storedToken);
         }
@@ -28,18 +28,18 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     const saveToken = (newToken: string) => {
-        setCookie(AUTH_TOKEN_NAME, newToken);
+        setCookie(InternalConstants.AUTH_TOKEN_NAME, newToken);
         setToken(newToken);
     };
 
     const clearToken = () => {
-        removeCookie(AUTH_TOKEN_NAME);
+        removeCookie(InternalConstants.AUTH_TOKEN_NAME);
         setToken(null);
         setUser(null);
     };
 
     const getToken = () => {
-        return getCookie(AUTH_TOKEN_NAME);
+        return getCookie(InternalConstants.AUTH_TOKEN_NAME);
     };
 
     const isLoggedIn = !!token;

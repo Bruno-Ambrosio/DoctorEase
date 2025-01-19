@@ -1,33 +1,29 @@
 import { useEffect } from 'react';
+import { ToastType } from '../enums/ToastType';
+import { ToastProps } from '../props/global_props/ToastProps';
 
-interface ToastProps {
-    message: string;
-    type?: "success" | "error" | "info" | "warning";
-    duration?: number;
-    onClose: () => void;
-}
-
-const Toast: React.FC<ToastProps> = ({ message, type = "info", duration = 3000, onClose }) => {
+const Toast: React.FC<ToastProps> = ({ message, type = ToastType.Info, duration = 3000, onClose }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
-            onClose();
+            onClose?.();
         }, duration);
 
         return () => clearTimeout(timer);
     }, [duration, onClose]);
 
     const typeStyles = {
-        success: "bg-green-500 text-white",
-        error: "bg-red-500 text-white",
-        info: "bg-blue-500 text-white",
-        warning: "bg-yellow-500 text-black",
+        [ToastType.Success]: "border-green-500 text-green-700",
+        [ToastType.Error]: "border-red-500 text-red-700",
+        [ToastType.Info]: "border-blue-500 text-blue-700",
+        [ToastType.Warning]: "border-yellow-500 text-yellow-700",
     };
 
     return (
-        <div
-            className={`fixed top-4 right-4 z-50 rounded-lg px-4 py-2 shadow-lg transition-opacity duration-300 ${typeStyles[type]}`}
-        >
-            {message}
+        <div>
+            <div className={`${typeStyles[type]} bg-white-50 border-l-4 p-4 rounded-lg`}>
+                <p className="text-lg font-semibold">Message</p>
+                <p>{message}</p>
+            </div>
         </div>
     );
 };

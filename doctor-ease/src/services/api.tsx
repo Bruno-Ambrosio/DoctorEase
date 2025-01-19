@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { getCookie, removeCookie } from '../utils/Cookies';
-import { AUTH_TOKEN_NAME } from '../constants';
+import { InternalConstants } from '../constants/InternalConstants';
 
 const Api: AxiosInstance = axios.create({
   baseURL: "https://localhost:7017/",
@@ -14,7 +14,7 @@ Api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      removeCookie(AUTH_TOKEN_NAME);
+      removeCookie(InternalConstants.AUTH_TOKEN_NAME);
       window.location.href = "/";
     }
     return Promise.reject(error);
@@ -23,7 +23,7 @@ Api.interceptors.response.use(
 
 Api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = getCookie(AUTH_TOKEN_NAME);
+    const token = getCookie(InternalConstants.AUTH_TOKEN_NAME);
     if (token && config.headers) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }

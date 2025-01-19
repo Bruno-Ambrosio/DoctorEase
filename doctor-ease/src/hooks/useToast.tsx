@@ -1,6 +1,6 @@
-import { useContext } from "react";
-import { ToastContext } from "../context/ToastContext";
-import { ToastContextProps } from "../global_props/ToastContextProps";
+import { useContext } from 'react';
+import { ToastContext } from '../context/ToastContext';
+import { ToastContextProps } from '../props/global_props/ToastContextProps';
 
 const useToast = (): ToastContextProps => {
     const context = useContext(ToastContext);
