@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useState } from 'react';
 import Toast from '../components/Toast';
 import { ToastContextProps } from '../props/global_props/ToastContextProps';
-import { ToastType } from '../enums/ToastType';
+import { ToastEnum } from '../enums/ToastEnum';
 import { ToastProps } from '../props/global_props/ToastProps';
 
 interface ToastProviderProps {
@@ -13,7 +13,7 @@ const ToastContext = createContext<ToastContextProps | undefined>(undefined);
 const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
     const [toasts, setToasts] = useState<ToastProps[]>([]);
 
-    const addToast = (message: string, type?: ToastType, duration?: number) => {
+    const addToast = (message: string, type?: ToastEnum, duration?: number) => {
         const id = Date.now();
         setToasts((prev) => [...prev, { id, message, type, duration }]);
     };

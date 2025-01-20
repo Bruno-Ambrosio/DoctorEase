@@ -8,4 +8,9 @@ export const TextConstants = {
     LOGIN_BUTTON: 'Login',
     SIGNUP_BUTTON: 'Sign up',
     API_RESPONSE_ERROR: 'An error has occurred',
+    NEW_PATIENT_BUTTON: 'New Patient',
+    SIDEBAR_DASHBOARD: 'Dashboard',
+    SIDEBAR_PATIENTS: 'Patients',
+    SIDEBAR_REPORTS: 'Reports',
+    SIDEBAR_SEARCH: 'Search...',
   };

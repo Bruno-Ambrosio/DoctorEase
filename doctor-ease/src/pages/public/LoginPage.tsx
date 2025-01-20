@@ -9,7 +9,7 @@ import api from '../../services/api';
 import useAuth from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { TextConstants } from '../../constants/TextConstants';
-import { ToastType } from '../../enums/ToastType';
+import { ToastEnum } from '../../enums/ToastEnum';
 import { InternalConstants } from '../../constants/InternalConstants';
 
 interface LoginProps {
@@ -44,21 +44,21 @@ const LoginPage: React.FC = () => {
                 saveToken(res.data.content.token);
                 saveUser(res.data.content.user);
                 navigate("/home");
-                addToast(res.data.message, ToastType.Success, InternalConstants.DEFAULT_MESSAGE_DURATION);
+                addToast(res.data.message, ToastEnum.Success, InternalConstants.DEFAULT_MESSAGE_DURATION);
                 return;
             }
 
-            addToast(res.data.message, ToastType.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
+            addToast(res.data.message, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
         } catch (err: unknown) {
             if (err instanceof Error) {
-                addToast(err.message || TextConstants.API_RESPONSE_ERROR, ToastType.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
+                addToast(err.message || TextConstants.API_RESPONSE_ERROR, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
             }
         }
     };
 
     return (
         <div className="flex items-center justify-center w-screen h-screen bg-emerald-50">
-            <div className="w-full max-w-md bg-white-50 rounded-lg shadow-xl p-6">
+            <div className="w-full max-w-md bg-gray-50 rounded-lg shadow-xl p-6">
                 <h3 className="text-3xl font-bold text-emerald-600 text-center mb-6">
                     Doctor Ease
                 </h3>

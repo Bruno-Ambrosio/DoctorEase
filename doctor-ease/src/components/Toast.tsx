@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { ToastType } from '../enums/ToastType';
+import { ToastEnum } from '../enums/ToastEnum';
 import { ToastProps } from '../props/global_props/ToastProps';
 
-const Toast: React.FC<ToastProps> = ({ message, type = ToastType.Info, duration = 3000, onClose }) => {
+const Toast: React.FC<ToastProps> = ({ message, type = ToastEnum.Info, duration = 3000, onClose }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             onClose?.();
@@ -12,10 +12,10 @@ const Toast: React.FC<ToastProps> = ({ message, type = ToastType.Info, duration 
     }, [duration, onClose]);
 
     const typeStyles = {
-        [ToastType.Success]: "border-green-500 text-green-700",
-        [ToastType.Error]: "border-red-500 text-red-700",
-        [ToastType.Info]: "border-blue-500 text-blue-700",
-        [ToastType.Warning]: "border-yellow-500 text-yellow-700",
+        [ToastEnum.Success]: "border-green-500 text-green-700",
+        [ToastEnum.Error]: "border-red-500 text-red-700",
+        [ToastEnum.Info]: "border-blue-500 text-blue-700",
+        [ToastEnum.Warning]: "border-yellow-500 text-yellow-700",
     };
 
     return (
