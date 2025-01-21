@@ -8,7 +8,9 @@ const App: React.FC = () => {
   return (
     <ToastProvider>
       <AuthProvider>
-        <Router>
+        <Router future={{
+          v7_relativeSplatPath: true,
+        }}>
           <Routes />
         </Router>
       </AuthProvider>
