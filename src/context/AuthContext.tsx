@@ -1,16 +1,13 @@
-import { createContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { InternalConstants } from '../constants/InternalConstants.ts';
 import { UserProps } from '../props/global_props/UserProps.tsx';
 import { AuthProps } from '../props/global_props/AuthProps.tsx';
 import { getCookie, setCookie, removeCookie } from '../utils/Cookies.tsx';
+import { DefaultChildrenProps } from '../props/global_props/DefaultChildrenProps.tsx';
 
 const AuthContext = createContext<AuthProps | undefined>(undefined);
 
-interface AuthProviderProps {
-    children: ReactNode;
-}
-
-const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+const AuthProvider: React.FC<DefaultChildrenProps> = ({ children }) => {
     const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<UserProps | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -32,7 +29,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setToken(newToken);
     };
 
-    const clearToken = () => {
+    const logout = () => {
         removeCookie(InternalConstants.AUTH_TOKEN_NAME);
         setToken(null);
         setUser(null);
@@ -46,7 +43,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ token, saveToken, clearToken, isLoggedIn, isLoading, saveUser, user, getToken }}
+            value={{ token, saveToken, logout, isLoggedIn, isLoading, saveUser, user, getToken }}
         >
             {children}
         </AuthContext.Provider>

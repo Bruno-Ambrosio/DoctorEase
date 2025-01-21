@@ -1,5 +1,5 @@
-import { ToastType } from "../../enums/ToastEnum";
+import { ToastEnum } from "../../enums/ToastEnum";
 
 export interface ToastContextProps {
-    addToast: (message: string, type?: ToastType, duration?: number) => void;
+    addToast: (message: string, type?: ToastEnum, duration?: number) => void;
 }

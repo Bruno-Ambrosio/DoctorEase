@@ -1,16 +1,13 @@
-import React, { createContext, ReactNode, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import Toast from '../components/Toast';
 import { ToastContextProps } from '../props/global_props/ToastContextProps';
 import { ToastEnum } from '../enums/ToastEnum';
 import { ToastProps } from '../props/global_props/ToastProps';
-
-interface ToastProviderProps {
-    children: ReactNode;
-}
+import { DefaultChildrenProps } from '../props/global_props/DefaultChildrenProps';
 
 const ToastContext = createContext<ToastContextProps | undefined>(undefined);
 
-const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
+const ToastProvider: React.FC<DefaultChildrenProps> = ({ children }) => {
     const [toasts, setToasts] = useState<ToastProps[]>([]);
 
     const addToast = (message: string, type?: ToastEnum, duration?: number) => {

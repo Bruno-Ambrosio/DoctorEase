@@ -6,6 +6,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Work Sans', 'Roboto', 'ui-sans-serif', 'system-ui'],
+      },
       colors: {
         emerald: {
           50: '#d9fff0',
