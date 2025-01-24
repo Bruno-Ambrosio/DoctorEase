@@ -77,9 +77,9 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center w-screen h-screen bg-emerald-50">
+        <div className="flex items-center justify-center w-screen h-screen bg-babyblue-50">
             <div className="w-full max-w-md bg-gray-50 rounded-lg shadow-xl p-6">
-                <h3 className="text-3xl font-bold text-emerald-600 text-center mb-6">
+                <h3 className="text-3xl font-bold text-babyblue-500 text-center mb-6">
                     Doctor Ease
                 </h3>
                 <div className="flex flex-col gap-10">

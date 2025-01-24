@@ -21,7 +21,7 @@ interface RegisterProps {
     email: string;
     password: string;
     confirmPassword: string;
-    role: RoleEnum;
+    roleId: RoleEnum;
 }
 
 const RegisterPage: React.FC = () => {
@@ -32,7 +32,7 @@ const RegisterPage: React.FC = () => {
         email: "",
         password: "",
         confirmPassword: "",
-        role: RoleEnum.Default
+        roleId: RoleEnum.Default
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,6 +84,7 @@ const RegisterPage: React.FC = () => {
 
         let res;
         try {
+            user.roleId = 1;
             res = await api.post<LoginResponseProps>("api/Auth/register", user);
 
             if (res.data.success) {

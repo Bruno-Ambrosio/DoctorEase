@@ -36,7 +36,7 @@ const Sidebar: React.FC = () => {
         <div className="h-full w-72 bg-gray-50 flex flex-col justify-between p-2">
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-12">
-                    <h3 className="text-3xl font-bold text-emerald-600 p-2 text-center">
+                    <h3 className="text-3xl font-bold text-babyblue-500 p-2 text-center">
                         Doctor Ease
                     </h3>
                     <Field type="search" name={TextConstants.SIDEBAR_SEARCH} placeholder={TextConstants.SIDEBAR_SEARCH} onChange={() => { }} />

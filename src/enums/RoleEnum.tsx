@@ -1,4 +1,4 @@
 export enum RoleEnum {
-    Default = 0,
-    Administrator = 1,
+    Default = 1,
+    Administrator = 2,
 }
