@@ -8,6 +8,10 @@ export const isValidEmail = (email: string): boolean => {
 };
 
 export const isValidName = (name: string): boolean => {
-    const regex = /^[A-Za-z]{4,}$/;
+    const regex = /^[A-Za-z]+(?:\s[A-Za-z]+)+$/;
     return regex.test(name);
 };
+
+export const isValidRole = (id: number): boolean => {
+    return id > 0;
+}

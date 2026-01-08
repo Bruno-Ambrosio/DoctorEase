@@ -23,5 +23,7 @@ export const TextConstants = {
     SUCCESS_MESSAGE_TITLE: 'Success',
     INFO_MESSAGE_TITLE: 'Info',
     ERROR_MESSAGE_TITLE: 'Error',
-    LOGOUT_BUTTON: 'Logout'
+    LOGOUT_BUTTON: 'Logout',
+    ROLE_COMBOBOX_LABEL: 'Role',
+    COMBOBOX_PLACEHOLDER: 'Select...',
   };

@@ -1,27 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Field from '../../components/Field';
 import Button from '../../components/Button';
 import Link from '../../components/Link';
 import Label from '../../components/Label';
 import useToast from '../../hooks/useToast';
 import { LoginResponseProps } from '../../props/api_props/LoginResponseProps';
+import { RolesResponseProps, RoleProps } from '../../props/api_props/RolesResponseProps';
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import { TextConstants } from '../../constants/TextConstants';
 import { ToastEnum } from '../../enums/ToastEnum';
 import { InternalConstants } from '../../constants/InternalConstants';
-import { RoleEnum } from '../../enums/RoleEnum';
 import { UrlConstants } from '../../constants/UrlConstants';
 import { verifyPassword } from '../../utils/Password';
 import { MessageConstants } from '../../constants/MessageConstants';
-import { isBlank, isValidEmail, isValidName } from '../../utils/Fields';
+import { isBlank, isValidEmail, isValidName, isValidRole } from '../../utils/Fields';
+import ComboBox, { ComboBoxOption } from '../../components/ComboBox';
+
 
 interface RegisterProps {
     name: string;
     email: string;
     password: string;
     confirmPassword: string;
-    roleId: RoleEnum;
+    roleId: number;
 }
 
 const RegisterPage: React.FC = () => {
@@ -32,11 +34,13 @@ const RegisterPage: React.FC = () => {
         email: "",
         password: "",
         confirmPassword: "",
-        roleId: RoleEnum.Default
+        roleId: 0
     });
+    const [roles, setRoles] = useState<ComboBoxOption[]>([]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
+
         setUser((prevUser) => ({
             ...prevUser,
             [name]: value,
@@ -72,13 +76,18 @@ const RegisterPage: React.FC = () => {
             return;
         }
 
-        if (!isValidEmail(user.email)){
+        if (!isValidEmail(user.email)) {
             addToast(MessageConstants.INVALID_EMAIL, ToastEnum.Warning);
             return;
         }
 
-        if (!isValidName(user.name)){
+        if (!isValidName(user.name)) {
             addToast(MessageConstants.INVALID_NAME, ToastEnum.Warning);
+            return;
+        }
+
+        if (!isValidRole(user.roleId)){
+            addToast(MessageConstants.INVALID_ROLE, ToastEnum.Warning);
             return;
         }
 
@@ -88,6 +97,7 @@ const RegisterPage: React.FC = () => {
             res = await api.post<LoginResponseProps>("api/Auth/register", user);
 
             if (res.data.success) {
+                console.log('a')
                 addToast(res.data.message, ToastEnum.Success, InternalConstants.DEFAULT_MESSAGE_DURATION);
                 navigate(UrlConstants.LOGIN_URL);
                 return;
@@ -100,11 +110,36 @@ const RegisterPage: React.FC = () => {
             }
         }
     };
+    useEffect(() => {
+        const loadRoles = async () => {
+            const data = await getRoles();
+            const options: ComboBoxOption[] = data.map(role => ({
+                value: role.id,
+                label: role.description
+            }));
+            setRoles(options);
+        };
 
+        loadRoles();
+    }, []);
+
+    const getRoles = async (): Promise<RoleProps[]> => {
+        try {
+            const res = await api.get<RolesResponseProps>("api/role/roles");
+            if (res.data.success) {
+                return res.data.content;
+            }
+
+        } catch (err: unknown) {
+
+        }
+
+        return [];
+    };
     return (
-        <div className="flex items-center justify-center w-screen h-screen bg-emerald-50">
+        <div className="flex items-center justify-center w-screen h-screen bg-babyblue-50">
             <div className="w-full max-w-md bg-gray-50 rounded-lg shadow-xl p-6">
-                <h3 className="text-3xl font-bold text-emerald-600 text-center mb-6">
+                <h3 className="text-3xl font-bold text-babyblue-500 text-center mb-6">
                     Register
                 </h3>
                 <div className="flex flex-col gap-10">
@@ -124,6 +159,10 @@ const RegisterPage: React.FC = () => {
                         <div className="flex flex-col gap-2">
                             <Label text={TextConstants.CONFIRM_PASSWORD_LABEL} />
                             <Field name="confirmPassword" placeholder={TextConstants.CONFIRM_PASSWORD_PLACEHOLDER} type="password" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <Label text={TextConstants.ROLE_COMBOBOX_LABEL} />
+                            <ComboBox name="roleId" options={roles} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e)} />
                         </div>
                     </div>
                     <div className="flex flex-col gap-4">

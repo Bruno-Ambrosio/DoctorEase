@@ -5,4 +5,5 @@ export const MessageConstants= {
     INVALID_CONFIRM_PASSWORD: 'The password does not match the confirmation password!',
     INVALID_EMAIL: 'Please inform a valid email.',
     INVALID_NAME: 'Please inform a valid name with at least four letters.',
+    INVALID_ROLE: 'Please select a role.'
 };
