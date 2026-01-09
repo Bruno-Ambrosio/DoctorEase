@@ -26,4 +26,5 @@ export const TextConstants = {
     LOGOUT_BUTTON: 'Logout',
     ROLE_COMBOBOX_LABEL: 'Role',
     COMBOBOX_PLACEHOLDER: 'Select...',
+    NEW_PATIENT: '+ New patient',
   };

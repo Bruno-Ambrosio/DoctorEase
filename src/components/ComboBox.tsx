@@ -27,7 +27,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
             onChange={onChange}
             className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-babyblue-500"
         >
-            <option value="">{TextConstants.COMBOBOX_PLACEHOLDER}</option>
+            <option value="0">{TextConstants.COMBOBOX_PLACEHOLDER}</option>
 
             {options.map(option => (
                 <option key={option.value} value={option.value}>

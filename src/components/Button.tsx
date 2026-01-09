@@ -11,7 +11,7 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = ({ text, name, icon: Icon, onClick }) => {
     return (
         <button
-            className="flex items-center justify-center text-white w-full bg-babyblue-500 py-2 rounded-lg hover:bg-babyblue-600 transition duration-300 gap-2"
+            className="flex items-center justify-center text-white w-full bg-babyblue-500 p-2 rounded-lg hover:bg-babyblue-600 transition duration-300 gap-2"
             name={name}
             onClick={onClick}
         >

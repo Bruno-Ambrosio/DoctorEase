@@ -17,6 +17,21 @@ const Sidebar: React.FC = () => {
 
     const handleButtonClick = (buttonName: string) => {
         setActiveButton(buttonName);
+        switch(buttonName){
+            case UrlConstants.DASHBOARD_URL:
+                navigate(UrlConstants.DASHBOARD_URL);
+                break;
+            case UrlConstants.PATIENTS_URL:
+                navigate(UrlConstants.PATIENTS_URL);
+                break;
+            case UrlConstants.REPORTS_URL:
+                navigate(UrlConstants.REPORTS_URL);
+                break;
+            default:
+                navigate(UrlConstants.DASHBOARD_URL);
+                break;
+        }
+        navigate(buttonName);
     };
 
     const sidebarButtons = {

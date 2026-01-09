@@ -64,7 +64,7 @@ const LoginPage: React.FC = () => {
                 saveToken(res.data.content.token);
                 saveUser(res.data.content.user);
                 addToast(res.data.message, ToastEnum.Success, InternalConstants.DEFAULT_MESSAGE_DURATION);
-                navigate(UrlConstants.HOME_URL);
+                navigate(UrlConstants.DASHBOARD_URL);
                 return;
             }
 

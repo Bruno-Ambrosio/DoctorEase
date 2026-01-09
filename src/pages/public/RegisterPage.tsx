@@ -97,7 +97,6 @@ const RegisterPage: React.FC = () => {
             res = await api.post<LoginResponseProps>("api/Auth/register", user);
 
             if (res.data.success) {
-                console.log('a')
                 addToast(res.data.message, ToastEnum.Success, InternalConstants.DEFAULT_MESSAGE_DURATION);
                 navigate(UrlConstants.LOGIN_URL);
                 return;
