@@ -5,6 +5,13 @@ import api from '../../services/api';
 import ComboBox, { ComboBoxOption } from '../../components/ComboBox';
 import Label from '../../components/Label';
 import Button from '../../components/Button';
+import { NewPatientResponseProps } from '../../props/api_props/NewPatientResponseProps';
+import { useNavigate } from 'react-router-dom';
+import { UrlConstants } from '../../constants/UrlConstants';
+import { ToastEnum } from '../../enums/ToastEnum';
+import { InternalConstants } from '../../constants/InternalConstants';
+import { TextConstants } from '../../constants/TextConstants';
+import useToast from '../../hooks/useToast';
 
 interface PatientProps {
     name: string;
@@ -13,11 +20,24 @@ interface PatientProps {
 }
 
 const NewPatient: React.FC = () => {
-
+    const [patient, setPatient] = useState<PatientProps>({
+        name: "",
+        adress: "",
+        genderId: 0
+    });
+    const { addToast } = useToast();
+    const navigate = useNavigate();
     const [genders, setGenders] = useState<ComboBoxOption[]>([]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         e.preventDefault();
+
+        const { name, value } = e.target;
+
+        setPatient((prevPatient) => ({
+            ...prevPatient,
+            [name]: value,
+        }));
     }
 
     const getGenders = async (): Promise<GenderProps[]> => {
@@ -49,8 +69,25 @@ const NewPatient: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-    }
 
+        let res;
+        try {
+            res = await api.post<NewPatientResponseProps>("api/patient/CreatePatient", patient);
+
+            if (res.data.success) {
+                addToast(res.data.message, ToastEnum.Success, InternalConstants.DEFAULT_MESSAGE_DURATION);
+                navigate(UrlConstants.PATIENTS_URL);
+                return;
+            }
+
+            addToast(res.data.message, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                addToast(err.message || TextConstants.API_RESPONSE_ERROR, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
+            }
+        }
+    }
+    
     return (
         <div className="p-4 flex flex-col gap-12 w-full h-full bg-gray-200">
             <div className="flex justify-between">

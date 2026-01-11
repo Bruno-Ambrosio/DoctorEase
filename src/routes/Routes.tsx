@@ -8,6 +8,7 @@ import PublicRoute from './PublicRoute';
 import DashboardPage from '../pages/private/DashboardPage';
 import ReportsPage from '../pages/private/ReportsPage';
 import NewPatient from '../pages/private/NewPatient';
+import PatientPage from '../pages/private/PatientPage';
 
 const Routes: React.FC = () => {
     return (
@@ -19,6 +20,7 @@ const Routes: React.FC = () => {
                 <Route path="/patients" element={<PatientsPage />} />
                 <Route path="/reports" element={<ReportsPage />} />
                 <Route path="/newPatient" element={<NewPatient />} />
+                <Route path="/patients/:id" element={<PatientPage />} />
             </Route>
         </RoutesDom>
     );
