@@ -4,7 +4,9 @@ export interface PatientProps {
     id: number,
     name: string,
     adress: string,
-    gender: GenderProps
+    gender: GenderProps,
+    additionalInfo: string
+    active: boolean
 }
 
 export interface PatientsResponseProps {

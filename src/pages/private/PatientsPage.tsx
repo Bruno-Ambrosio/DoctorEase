@@ -6,14 +6,17 @@ import { useNavigate } from 'react-router-dom';
 import { UrlConstants } from '../../constants/UrlConstants';
 import { PatientProps, PatientsResponseProps } from '../../props/api_props/PatientsResponseProps';
 import api from '../../services/api';
+import Checkbox from '../../components/Checkbox';
 
 const PatientsPage: React.FC = () => {
     const navigate = useNavigate();
     const [patients, setPatients] = useState<PatientProps[]>([])
+    const [filteredPatients, setFilteredPatients] = useState<PatientProps[]>([]);
     const handleNewPatient = (e: React.FormEvent) => {
         e.preventDefault();
         navigate(UrlConstants.NEWPATIENT_URL);
     }
+    const [showInactive, setShowInactive] = useState<boolean>(false);
 
     const getPatients = async (): Promise<PatientProps[]> => {
         try {
@@ -32,14 +35,32 @@ const PatientsPage: React.FC = () => {
     useEffect(() => {
         const loadRoles = async () => {
             const data = await getPatients();
+            data.sort((a, b) => a.name.localeCompare(b.name))
             setPatients(data);
+            filterActive(data, showInactive);
         };
 
         loadRoles();
     }, []);
 
+    const handleShowInactive = (active: boolean) => {
+        setShowInactive(active);
+        filterActive(patients, active);
+    }
+
+    const filterActive = (pat: PatientProps[], active: boolean) => {
+        if (active) {
+            const filter = pat;
+            setFilteredPatients(filter);
+        }
+        else {
+            const filter = pat.filter(p => p.active === true);
+            setFilteredPatients(filter);
+        }
+    }
+
     return (
-        <div className="p-4 flex flex-col gap-12 w-full h-full bg-gray-200">
+        <div className="p-4 flex flex-col gap-5 w-full h-full bg-gray-200">
             <div className="flex justify-between">
                 <h1 className='text-2xl text-gray-500'>
                     Patients
@@ -49,9 +70,15 @@ const PatientsPage: React.FC = () => {
                 </div>
             </div>
 
+            <div className='flex px-4'>
+                <div className='flex bg-gray-50 h-10 rounded-lg items-center p-2 w-full'>
+                    <Checkbox active={showInactive} label="Show inactive" onChange={handleShowInactive} />
+                </div>
+            </div>
+
             <div className="flex flex-wrap w-full p-4 gap-5">
-                {patients.map((item) => (
-                    <Card text={item.name} url={`patients/${item.id}`} />
+                {filteredPatients.map((item) => (
+                    <Card text={item.name} url={`${UrlConstants.PATIENTS_URL}/${item.id}`} bgColor={item.active ? "" : "bg-gray-300"}/>
                 ))}
             </div>
 

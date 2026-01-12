@@ -8,7 +8,7 @@ const PublicRoute: React.FC<DefaultChildrenProps> = ({ children }) => {
         return <div>Loading...</div>;
     }
 
-    return isLoggedIn ? <Navigate to="/home" /> : <>{children}</>;
+    return isLoggedIn ? <Navigate to="/patients" /> : <>{children}</>;
 };
 
 export default PublicRoute;

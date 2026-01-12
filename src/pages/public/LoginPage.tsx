@@ -37,21 +37,21 @@ const LoginPage: React.FC = () => {
         }));
     };
 
-      const validateUserFields = (user: LoginProps): boolean => {
-            return !isBlank(user.email) &&
-                !isBlank(user.password);
-        };
-    
+    const validateUserFields = (user: LoginProps): boolean => {
+        return !isBlank(user.email) &&
+            !isBlank(user.password);
+    };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!validateUserFields(user)){
+        if (!validateUserFields(user)) {
             addToast(MessageConstants.BLANK_FIELDS, ToastEnum.Warning);
             return;
         }
 
-        if (!isValidEmail(user.email)){
+        if (!isValidEmail(user.email)) {
             addToast(MessageConstants.INVALID_EMAIL, ToastEnum.Warning);
             return;
         }
@@ -86,11 +86,11 @@ const LoginPage: React.FC = () => {
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-2">
                             <Label text={TextConstants.EMAIL_LABEL} />
-                            <Field name="email" placeholder={TextConstants.EMAIL_PLACEHOLDER} type="email" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
+                            <Field name="email" placeholder={TextConstants.EMAIL_PLACEHOLDER} type="email" value={user.email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
                         </div>
                         <div className="flex flex-col gap-2">
                             <Label text={TextConstants.PASSWORD_LABEL} />
-                            <Field name="password" placeholder={TextConstants.PASSWORD_PLACEHOLDER} type="password" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
+                            <Field name="password" placeholder={TextConstants.PASSWORD_PLACEHOLDER} type="password" value={user.password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
                         </div>
                     </div>
                     <div className="flex flex-col gap-4">
@@ -100,7 +100,7 @@ const LoginPage: React.FC = () => {
                         </div>
                         <div className="mt-4 flex justify-between">
                             <Link text={TextConstants.FORGOT_PASSWORD_LINK} />
-                            <Link text={TextConstants.SIGNUP_LINK} url={UrlConstants.REGISTER_URL}/>
+                            <Link text={TextConstants.SIGNUP_LINK} url={UrlConstants.REGISTER_URL} />
                         </div>
                     </div>
                 </div>

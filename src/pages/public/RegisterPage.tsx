@@ -93,7 +93,6 @@ const RegisterPage: React.FC = () => {
 
         let res;
         try {
-            user.roleId = 1;
             res = await api.post<LoginResponseProps>("api/Auth/register", user);
 
             if (res.data.success) {
@@ -145,19 +144,19 @@ const RegisterPage: React.FC = () => {
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-2">
                             <Label text={TextConstants.NAME_LABEL} />
-                            <Field name="name" placeholder={TextConstants.NAME_PLACEHOLDER} type="text" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
+                            <Field name="name" placeholder={TextConstants.NAME_PLACEHOLDER} type="text" value={user.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
                         </div>
                         <div className="flex flex-col gap-2">
                             <Label text={TextConstants.EMAIL_LABEL} />
-                            <Field name="email" placeholder={TextConstants.EMAIL_PLACEHOLDER} type="email" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
+                            <Field name="email" placeholder={TextConstants.EMAIL_PLACEHOLDER} type="email" value={user.email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
                         </div>
                         <div className="flex flex-col gap-2">
                             <Label text={TextConstants.PASSWORD_LABEL} />
-                            <Field name="password" placeholder={TextConstants.PASSWORD_PLACEHOLDER} type="password" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
+                            <Field name="password" placeholder={TextConstants.PASSWORD_PLACEHOLDER} type="password" value={user.password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
                         </div>
                         <div className="flex flex-col gap-2">
                             <Label text={TextConstants.CONFIRM_PASSWORD_LABEL} />
-                            <Field name="confirmPassword" placeholder={TextConstants.CONFIRM_PASSWORD_PLACEHOLDER} type="password" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
+                            <Field name="confirmPassword" placeholder={TextConstants.CONFIRM_PASSWORD_PLACEHOLDER} type="password" value="" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
                         </div>
                         <div className="flex flex-col gap-2">
                             <Label text={TextConstants.ROLE_COMBOBOX_LABEL} />

@@ -4,5 +4,5 @@ export const UrlConstants = {
     DASHBOARD_URL: '/dashboard',
     PATIENTS_URL: '/patients',
     REPORTS_URL: '/reports',
-    NEWPATIENT_URL: '/newPatient'
+    NEWPATIENT_URL: '/newPatient',
 };

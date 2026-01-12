@@ -7,11 +7,12 @@ interface ButtonProps {
     name: string;
     type?: ButtonEnum;
     icon?: IconType;
+    image?: string;
     onClick: (e: React.FormEvent) => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ text, name, icon: Icon, onClick, type = ButtonEnum.Regular}) => {
-    
+const Button: React.FC<ButtonProps> = ({ text, name, icon: Icon, onClick, type = ButtonEnum.Regular, image }) => {
+
     let color;
     let hover;
     switch (type) {
@@ -36,6 +37,7 @@ const Button: React.FC<ButtonProps> = ({ text, name, icon: Icon, onClick, type =
             onClick={onClick}
         >
             {Icon && <Icon />}
+            {image && <img src={image} alt="" className="h-6 w-6 object-contain"/>}
             <span className="text-lg font-bold">{text}</span>
         </button>
     );

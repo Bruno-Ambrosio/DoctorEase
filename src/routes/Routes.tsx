@@ -20,6 +20,7 @@ const Routes: React.FC = () => {
                 <Route path="/patients" element={<PatientsPage />} />
                 <Route path="/reports" element={<ReportsPage />} />
                 <Route path="/newPatient" element={<NewPatient />} />
+                <Route path="/newPatient/:id" element={<NewPatient />} />
                 <Route path="/patients/:id" element={<PatientPage />} />
             </Route>
         </RoutesDom>

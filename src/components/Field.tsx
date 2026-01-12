@@ -4,10 +4,12 @@ interface FieldProps {
     type: string;
     name: string;
     placeholder: string;
+    readonly?: boolean;
+    value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Field: React.FC<FieldProps> = ({ type, name, placeholder, onChange }) => {
+const Field: React.FC<FieldProps> = ({ type, name, placeholder, readonly = false, value, onChange }) => {
     return (
 
         <input
@@ -16,6 +18,8 @@ const Field: React.FC<FieldProps> = ({ type, name, placeholder, onChange }) => {
             id={name}
             className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-babyblue-500"
             placeholder={placeholder}
+            readOnly={readonly}
+            value={value}
             onChange={onChange}
         />
     );
