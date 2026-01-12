@@ -54,7 +54,7 @@ const Sidebar: React.FC = () => {
                     <h3 className="text-3xl font-bold text-babyblue-500 p-2 text-center">
                         Doctor Ease
                     </h3>
-                    <Field type="search" name={TextConstants.SIDEBAR_SEARCH} placeholder={TextConstants.SIDEBAR_SEARCH} onChange={() => { }} />
+                    <Field type="search" name={TextConstants.SIDEBAR_SEARCH} placeholder={TextConstants.SIDEBAR_SEARCH} onChange={() => { }} value=""/>
                 </div>
 
                 <div className="flex flex-col">

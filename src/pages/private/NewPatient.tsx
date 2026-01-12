@@ -108,6 +108,7 @@ const NewPatient: React.FC = () => {
             name: "",
             adress: "",
             active: true,
+            additionalInfo: "",
             gender: {
                 id: 0,
                 description: ""
