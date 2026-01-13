@@ -6,7 +6,6 @@ import { PatientResponseProps } from '../../props/api_props/PatientResponseProps
 import PatientImg from '../../assets/images/patient.png';
 import Button from '../../components/Button';
 import { ButtonEnum } from '../../enums/ButtonEnum';
-import { ChangePatientStatusResponseProps } from '../../props/api_props/ChangePatientStatusResponseProps';
 import useToast from '../../hooks/useToast';
 import { ToastEnum } from '../../enums/ToastEnum';
 import { InternalConstants } from '../../constants/InternalConstants';
@@ -19,6 +18,8 @@ import DownloadIcon from '../../assets/images/download.png';
 import DeleteIcon from '../../assets/images/close.png';
 import { selectFilesByExtension } from '../../utils/Files';
 import { UploadExamsResponseProps } from '../../props/api_props/UploadExamsResponseProps';
+import { GetExamsByPatientProps, GetExamsByPatientResponseProps } from '../../props/api_props/GetExamsByPatientResponseProps';
+import { BooleanResponseProps } from '../../props/api_props/BooleanResponseProps';
 
 const PatientPage: React.FC = () => {
     const navigate = useNavigate();
@@ -37,6 +38,7 @@ const PatientPage: React.FC = () => {
     const { addToast } = useToast();
     const [sync, setSync] = useState<boolean>(true);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [exams, setExams] = useState<GetExamsByPatientProps[]>([]);
 
     const getPatient = async (): Promise<PatientProps> => {
         try {
@@ -82,7 +84,7 @@ const PatientPage: React.FC = () => {
 
         let res;
         try {
-            res = await api.patch<ChangePatientStatusResponseProps>(`api/patient/ChangePatientStatus:${Number(id)}`, patient.active ? false : true);
+            res = await api.patch<BooleanResponseProps>(`api/patient/ChangePatientStatus:${Number(id)}`, patient.active ? false : true);
             if (res.data.success) {
                 window.location.reload();
                 return;
@@ -113,7 +115,7 @@ const PatientPage: React.FC = () => {
         }
 
         try {
-            const res = await api.patch<ChangePatientStatusResponseProps>(`api/patient/UpdateAdditionalInfo:${Number(id)}`, patient.additionalInfo);
+            const res = await api.patch<BooleanResponseProps>(`api/patient/UpdateAdditionalInfo:${Number(id)}`, patient.additionalInfo);
             if (res.data.success) {
                 setSync(true);
             }
@@ -129,8 +131,9 @@ const PatientPage: React.FC = () => {
         handleSync();
     }
 
-    const handleExamsClick = (e: React.FormEvent) => {
+    const handleExamsClick = async (e: React.FormEvent) => {
         e.preventDefault();
+        loadExams();
         setIsModalOpen(true);
     }
 
@@ -158,6 +161,7 @@ const PatientPage: React.FC = () => {
 
             if (res.data.success) {
                 addToast(res.data.message, ToastEnum.Success, InternalConstants.DEFAULT_MESSAGE_DURATION);
+                loadExams();
                 return;
             }
 
@@ -167,6 +171,42 @@ const PatientPage: React.FC = () => {
                 addToast(err.message || TextConstants.API_RESPONSE_ERROR, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
             }
         }
+    }
+
+    const loadExams = async () => {
+        try {
+            const res = await api.get<GetExamsByPatientResponseProps>(`api/exam/GetExamsByPatientId:${Number(id)}`);
+            if (res.data.success) {
+                setExams(res.data.content);
+            }
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+
+            }
+        }
+    }
+
+    const deleteExam = async (examId: number) => {
+        let res;
+        try {
+            res = await api.delete<BooleanResponseProps>(`api/Exam/Delete:${examId}`);
+
+            if (res.data.success) {
+                addToast(res.data.message, ToastEnum.Success, InternalConstants.DEFAULT_MESSAGE_DURATION);
+                loadExams();
+                return;
+            }
+
+            addToast(res.data.message, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                addToast(err.message || TextConstants.API_RESPONSE_ERROR, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
+            }
+        }
+    }
+
+    const openExam = (examId: number) => {
+        window.open(`${api.defaults.baseURL}api/Exam/Open/${examId}`, "_blank");
     }
 
     return (
@@ -215,19 +255,22 @@ const PatientPage: React.FC = () => {
                     <div className='flex w-60'>
                         <Button name='upload' text="Upload from device" type={ButtonEnum.Regular} onClick={handleUploadExam} />
                     </div>
-                    <div className='flex w-full bg-slate-200 p-2 rounded-lg justify-between items-center'>
-                        <h1 className='text-lg text-gray-500'>
-                            Patient.pdf
-                        </h1>
-                        <div className='flex gap-3 items-center'>
-                            <div className='size-6'>
-                                <ImageButton image={DownloadIcon} onClick={() => { }} />
-                            </div>
-                            <div className='size-8'>
-                                <ImageButton image={DeleteIcon} onClick={() => { }} />
+
+                    {exams && exams.map((item) => (
+                        <div className='flex w-full bg-slate-200 p-2 rounded-lg justify-between items-center'>
+                            <h1 className='text-lg text-gray-500'>
+                                {item.title}
+                            </h1>
+                            <div className='flex gap-3 items-center'>
+                                <div className='size-6'>
+                                    <ImageButton image={DownloadIcon} onClick={() => { openExam(item.id) }} />
+                                </div>
+                                <div className='size-8'>
+                                    <ImageButton image={DeleteIcon} onClick={() => { deleteExam(item.id) }} />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    ))}
                 </div>
             </Modal>
         </div>
