@@ -14,4 +14,4 @@ export const isValidName = (name: string): boolean => {
 
 export const isValidRole = (id: number): boolean => {
     return id > 0;
-}
+};

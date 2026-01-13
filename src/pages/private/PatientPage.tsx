@@ -13,7 +13,12 @@ import { InternalConstants } from '../../constants/InternalConstants';
 import { TextConstants } from '../../constants/TextConstants';
 import BigField from '../../components/BigField';
 import SyncButton from '../../components/SyncButton';
-import ExamIcon from '../../assets/images/exam.png';
+import Modal from '../../components/Modal';
+import ImageButton from '../../components/ImageButton';
+import DownloadIcon from '../../assets/images/download.png';
+import DeleteIcon from '../../assets/images/close.png';
+import { selectFilesByExtension } from '../../utils/Files';
+import { UploadExamsResponseProps } from '../../props/api_props/UploadExamsResponseProps';
 
 const PatientPage: React.FC = () => {
     const navigate = useNavigate();
@@ -31,6 +36,7 @@ const PatientPage: React.FC = () => {
     })
     const { addToast } = useToast();
     const [sync, setSync] = useState<boolean>(true);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const getPatient = async (): Promise<PatientProps> => {
         try {
@@ -123,6 +129,46 @@ const PatientPage: React.FC = () => {
         handleSync();
     }
 
+    const handleExamsClick = (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsModalOpen(true);
+    }
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    }
+
+    const handleUploadExam = async () => {
+        const files = await selectFilesByExtension(["pdf"]);
+
+        const formData = new FormData();
+        files.forEach((file) => {
+            formData.append(`titles`, file.fileName);
+            formData.append(`fileNames`, file.fileName);
+            formData.append(`files`, file.file);
+            formData.append(`dates`, new Date().toISOString());
+            formData.append(`patientIds`, String(id));
+        });
+
+        let res;
+        try {
+            res = await api.post<UploadExamsResponseProps>("api/Exam/UploadExam", formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            });
+
+            if (res.data.success) {
+                addToast(res.data.message, ToastEnum.Success, InternalConstants.DEFAULT_MESSAGE_DURATION);
+                return;
+            }
+
+            addToast(res.data.message, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                addToast(err.message || TextConstants.API_RESPONSE_ERROR, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
+            }
+        }
+    }
+
     return (
         <div className="p-4 flex flex-col gap-2 w-full h-full bg-gray-200">
             <div>
@@ -153,7 +199,7 @@ const PatientPage: React.FC = () => {
                         </div>
                     </div>
                     <div className='flex items-center gap-3 w-36 p-2'>
-                        <Button name="edit" text="Exams"  type={ButtonEnum.Regular} onClick={(e: React.FormEvent) => handleEditClick(e)} image={ExamIcon}/>
+                        <Button name="edit" text="Exams" type={ButtonEnum.Regular} onClick={(e: React.FormEvent) => handleExamsClick(e)} />
                     </div>
                 </div>
 
@@ -164,6 +210,26 @@ const PatientPage: React.FC = () => {
             <div>
 
             </div>
+            <Modal isOpen={isModalOpen} onClose={handleModalClose}>
+                <div className='flex flex-col gap-2'>
+                    <div className='flex w-60'>
+                        <Button name='upload' text="Upload from device" type={ButtonEnum.Regular} onClick={handleUploadExam} />
+                    </div>
+                    <div className='flex w-full bg-slate-200 p-2 rounded-lg justify-between items-center'>
+                        <h1 className='text-lg text-gray-500'>
+                            Patient.pdf
+                        </h1>
+                        <div className='flex gap-3 items-center'>
+                            <div className='size-6'>
+                                <ImageButton image={DownloadIcon} onClick={() => { }} />
+                            </div>
+                            <div className='size-8'>
+                                <ImageButton image={DeleteIcon} onClick={() => { }} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 };
