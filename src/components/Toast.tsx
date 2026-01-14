@@ -21,7 +21,7 @@ const Toast: React.FC<ToastProps> = ({ message, type = ToastEnum.Info, duration 
 
     return (
         <div>
-            <div className={`${typeStyles[type]} bg-gray-50 border-l-4 p-4 rounded-lg`}>
+            <div className={`${typeStyles[type]} bg-gray-50 border-l-4 p-4 rounded-md`}>
                 <p className="text-lg font-semibold">
                     {type == ToastEnum.Success ? TextConstants.SUCCESS_MESSAGE_TITLE :
                         type == ToastEnum.Info ? TextConstants.INFO_MESSAGE_TITLE :

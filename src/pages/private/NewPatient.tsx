@@ -38,6 +38,7 @@ const NewPatient: React.FC = () => {
     const navigate = useNavigate();
     const [genders, setGenders] = useState<ComboBoxOption[]>([]);
     const { id } = useParams();
+    const [patientOriginalName, setPatientOriginalName] = useState<string>("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         e.preventDefault();
@@ -86,6 +87,7 @@ const NewPatient: React.FC = () => {
                     adress: data.adress,
                     genderId: data.gender.id
                 });
+                setPatientOriginalName(data.name);
             };
 
             loadPatient();
@@ -155,10 +157,10 @@ const NewPatient: React.FC = () => {
     }
 
     return (
-        <div className="p-4 flex flex-col gap-12 w-full h-full bg-gray-200">
+        <div className="p-4 flex flex-col gap-6 w-full h-full bg-gray-200">
             <div className="flex justify-between">
-                <h1 className='text-2xl text-gray-500'>
-                    {id ? "Patient edit form" : "Patient register form"}
+                <h1 className='text-2xl text-gray-600'>
+                    {id ? `Edit patient ${patientOriginalName}` : "New patient"}
                 </h1>
 
             </div>

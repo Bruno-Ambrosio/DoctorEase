@@ -7,7 +7,7 @@ interface LinkProps {
 
 const Link: React.FC<LinkProps> = ({ text, url }) => {
     return (
-        <a className="hover:underline text-sm text-gray-500" href={url}>
+        <a className="hover:underline text-sm text-gray-600" href={url}>
             {text}
         </a>
     );

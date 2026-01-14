@@ -20,10 +20,12 @@ import { selectFilesByExtension } from '../../utils/Files';
 import { UploadExamsResponseProps } from '../../props/api_props/UploadExamsResponseProps';
 import { GetExamsByPatientProps, GetExamsByPatientResponseProps } from '../../props/api_props/GetExamsByPatientResponseProps';
 import { BooleanResponseProps } from '../../props/api_props/BooleanResponseProps';
+import useAuth from '../../hooks/useAuth';
 
 const PatientPage: React.FC = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+    const { getToken } = useAuth();
     const [patient, setPatient] = useState<PatientProps>({
         id: 0,
         name: "",
@@ -79,24 +81,24 @@ const PatientPage: React.FC = () => {
         navigate(`/newPatient/${patient.id}`);
     }
 
-    const handleInactiveClick = async (e: React.FormEvent) => {
-        e.preventDefault();
+    // const handleInactiveClick = async (e: React.FormEvent) => {
+    //     e.preventDefault();
 
-        let res;
-        try {
-            res = await api.patch<BooleanResponseProps>(`api/patient/ChangePatientStatus:${Number(id)}`, patient.active ? false : true);
-            if (res.data.success) {
-                window.location.reload();
-                return;
-            }
+    //     let res;
+    //     try {
+    //         res = await api.patch<BooleanResponseProps>(`api/patient/ChangePatientStatus:${Number(id)}`, patient.active ? false : true);
+    //         if (res.data.success) {
+    //             window.location.reload();
+    //             return;
+    //         }
 
-            addToast(res.data.message, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
-        } catch (err: unknown) {
-            if (err instanceof Error) {
-                addToast(err.message || TextConstants.API_RESPONSE_ERROR, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
-            }
-        }
-    }
+    //         addToast(res.data.message, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
+    //     } catch (err: unknown) {
+    //         if (err instanceof Error) {
+    //             addToast(err.message || TextConstants.API_RESPONSE_ERROR, ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
+    //         }
+    //     }
+    // }
 
     const handleInfoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         e.preventDefault();
@@ -205,45 +207,63 @@ const PatientPage: React.FC = () => {
         }
     }
 
-    const openExam = (examId: number) => {
-        window.open(`${api.defaults.baseURL}api/Exam/Open/${examId}`, "_blank");
+    const openExam = async (examId: number) => {
+        const token = getToken();
+
+        const response = await fetch(
+            `${api.defaults.baseURL}api/Exam/Open/${examId}`,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (!response.ok) {
+            addToast("Unauthorized", ToastEnum.Error, InternalConstants.DEFAULT_MESSAGE_DURATION);
+        }
+
+        const blob = await response.blob();
+        const fileURL = URL.createObjectURL(blob);
+
+        window.open(fileURL, "_blank");
     }
 
     return (
-        <div className="p-4 flex flex-col gap-2 w-full h-full bg-gray-200">
+        <div className="p-4 flex flex-col gap-2 w-full h-full">
             <div>
-                <div className="flex bg-gray-100 p-5 rounded-lg justify-between">
+                <div className="flex bg-gray-100 p-5 rounded-md justify-between">
                     <div className='flex gap-20'>
-                        <img src={PatientImg} alt="" className="w-40 rounded-lg" />
-                        <div className='flex flex-col text-xl text-gray-500 gap-5 justify-center'>
-                            <h1>Name: {patient.name}</h1>
-                            <h1>Address: {patient.adress}</h1>
-                            <h1>Gender: {patient.gender.description}</h1>
-                            <h1>Status: {patient.active ? "Active" : "Inactive"}</h1>
+                        <img src={PatientImg} alt="" className="w-40 rounded-md" />
+                        <div className='flex flex-col text-md text-gray-600 gap-3 justify-center'>
+                            <span>Name: {patient.name}</span>
+                            <span>Address: {patient.adress}</span>
+                            <span>Gender: {patient.gender.description}</span>
+                            <span>Status: {patient.active ? "Active" : "Inactive"}</span>
                         </div>
                     </div>
-                    <div className='flex flex-col gap-2 w-60'>
-                        <Button name="edit" text="Edit" type={ButtonEnum.Edit} onClick={(e: React.FormEvent) => handleEditClick(e)} />
-                        <Button name="inactive" text={patient.active ? "Inactivate" : "Activate"} type={patient.active ? ButtonEnum.Inactive : ButtonEnum.Regular} onClick={(e: React.FormEvent) => handleInactiveClick(e)} />
+                    <div className='flex flex-col gap-2 w-32'>
+                        <Button name="edit" text="Edit" type={ButtonEnum.Gray} onClick={(e: React.FormEvent) => handleEditClick(e)} />
                     </div>
                 </div>
             </div>
             <div className='flex flex-col h-full'>
                 <div className='flex justify-between'>
                     <div className='flex gap-3 items-center'>
-                        <h1 className='text-2xl text-gray-500'>
+                        <h1 className='text-xl text-gray-600'>
                             Additional information
                         </h1>
-                        <div className='size-10'>
+                        <div className='size-8'>
                             <SyncButton synced={sync} onChange={handleSync} />
                         </div>
                     </div>
                     <div className='flex items-center gap-3 w-36 p-2'>
-                        <Button name="edit" text="Exams" type={ButtonEnum.Regular} onClick={(e: React.FormEvent) => handleExamsClick(e)} />
+                        <Button name="exams" text="Exams" type={ButtonEnum.Gray} onClick={(e: React.FormEvent) => handleExamsClick(e)} />
                     </div>
                 </div>
 
-                <div className='flex bg-gray-100 p-5 rounded-lg h-full'>
+                <div className='flex bg-gray-100 p-5 rounded-md h-full'>
                     <BigField name="additionalInfo" placeholder="Type additional information about the patient" value={patient.additionalInfo} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleInfoChange(e)} onBlur={(e) => handleBlur(e)} />
                 </div>
             </div>
@@ -253,21 +273,17 @@ const PatientPage: React.FC = () => {
             <Modal isOpen={isModalOpen} onClose={handleModalClose}>
                 <div className='flex flex-col gap-2'>
                     <div className='flex w-60'>
-                        <Button name='upload' text="Upload from device" type={ButtonEnum.Regular} onClick={handleUploadExam} />
+                        <Button name='upload' text="Upload from device" type={ButtonEnum.Gray} onClick={handleUploadExam} />
                     </div>
 
                     {exams && exams.map((item) => (
-                        <div className='flex w-full bg-slate-200 p-2 rounded-lg justify-between items-center'>
-                            <h1 className='text-lg text-gray-500'>
+                        <div className='flex w-full bg-slate-200 p-2 rounded-md justify-between items-center'>
+                            <span className='text-md text-gray-600'>
                                 {item.title}
-                            </h1>
+                            </span>
                             <div className='flex gap-3 items-center'>
-                                <div className='size-6'>
-                                    <ImageButton image={DownloadIcon} onClick={() => { openExam(item.id) }} />
-                                </div>
-                                <div className='size-8'>
-                                    <ImageButton image={DeleteIcon} onClick={() => { deleteExam(item.id) }} />
-                                </div>
+                                <ImageButton image={DownloadIcon} onClick={() => { openExam(item.id) }} imageCss='size-6' />
+                                <ImageButton image={DeleteIcon} onClick={() => { deleteExam(item.id) }} imageCss='size-8' />
                             </div>
                         </div>
                     ))}

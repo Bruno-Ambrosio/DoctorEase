@@ -4,6 +4,8 @@ import { UserProps } from '../props/global_props/UserProps.tsx';
 import { AuthProps } from '../props/global_props/AuthProps.tsx';
 import { getCookie, setCookie, removeCookie } from '../utils/Cookies.tsx';
 import { DefaultChildrenProps } from '../props/global_props/DefaultChildrenProps.tsx';
+import { LoggedUserResponseProps } from '../props/api_props/LoggedUserResponseProps.tsx';
+import Api from '../services/api.tsx';
 
 const AuthContext = createContext<AuthProps | undefined>(undefined);
 
@@ -14,11 +16,25 @@ const AuthProvider: React.FC<DefaultChildrenProps> = ({ children }) => {
 
     useEffect(() => {
         const storedToken = getToken();
-        if (storedToken) {
-            setToken(storedToken);
+
+        if (!storedToken) {
+            setIsLoading(false);
+            return;
         }
+
+        setToken(storedToken);
+        loadUser();
         setIsLoading(false);
     }, []);
+
+    const loadUser = async () => {
+        try {
+            const res = await Api.get<LoggedUserResponseProps>("api/auth/me");
+            setUser(res.data.content);
+        } catch {
+            logout();
+        }
+    }
 
     const saveUser = (newUser: UserProps) => {
         setUser(newUser);

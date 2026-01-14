@@ -7,7 +7,7 @@ interface LabelProps {
 const Label: React.FC<LabelProps> = ({ text }) => {
     return (
         <label
-            className="text-sm font-medium text-gray-500"
+            className="text-md text-gray-600"
         >
             {text}
         </label>

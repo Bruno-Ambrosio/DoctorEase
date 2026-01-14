@@ -16,6 +16,7 @@ import { verifyPassword } from '../../utils/Password';
 import { MessageConstants } from '../../constants/MessageConstants';
 import { isBlank, isValidEmail, isValidName, isValidRole } from '../../utils/Fields';
 import ComboBox, { ComboBoxOption } from '../../components/ComboBox';
+import { ButtonEnum } from '../../enums/ButtonEnum';
 
 
 interface RegisterProps {
@@ -86,7 +87,7 @@ const RegisterPage: React.FC = () => {
             return;
         }
 
-        if (!isValidRole(user.roleId)){
+        if (!isValidRole(user.roleId)) {
             addToast(MessageConstants.INVALID_ROLE, ToastEnum.Warning);
             return;
         }
@@ -135,10 +136,10 @@ const RegisterPage: React.FC = () => {
         return [];
     };
     return (
-        <div className="flex items-center justify-center w-screen h-screen bg-babyblue-50">
+        <div className="flex items-center justify-center w-screen h-screen bg-gray-200">
             <div className="w-full max-w-md bg-gray-50 rounded-lg shadow-xl p-6">
                 <h3 className="text-3xl font-bold text-babyblue-500 text-center mb-6">
-                    Register
+                    Doctor Ease
                 </h3>
                 <div className="flex flex-col gap-10">
                     <div className="flex flex-col gap-4">
@@ -156,7 +157,7 @@ const RegisterPage: React.FC = () => {
                         </div>
                         <div className="flex flex-col gap-2">
                             <Label text={TextConstants.CONFIRM_PASSWORD_LABEL} />
-                            <Field name="confirmPassword" placeholder={TextConstants.CONFIRM_PASSWORD_PLACEHOLDER} type="password" value="" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
+                            <Field name="confirmPassword" placeholder={TextConstants.CONFIRM_PASSWORD_PLACEHOLDER} type="password" value={user.confirmPassword} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)} />
                         </div>
                         <div className="flex flex-col gap-2">
                             <Label text={TextConstants.ROLE_COMBOBOX_LABEL} />
@@ -165,7 +166,7 @@ const RegisterPage: React.FC = () => {
                     </div>
                     <div className="flex flex-col gap-4">
                         <div className="flex justify-between gap-2">
-                            <Button name="register" text={TextConstants.REGISTER_BUTTON} onClick={(e: React.FormEvent) => handleSubmit(e)} />
+                            <Button name="register" text={TextConstants.REGISTER_BUTTON} onClick={(e: React.FormEvent) => handleSubmit(e)} type={ButtonEnum.Blue} />
                         </div>
                         <div className="mt-4 flex justify-center">
                             <Link text={TextConstants.ALREADY_HAVE_ACCOUNT} url={UrlConstants.LOGIN_URL} />

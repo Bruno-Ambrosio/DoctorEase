@@ -15,7 +15,7 @@ const BigField: React.FC<BigFieldProps> = ({ name, placeholder, readonly = false
         <textarea
             name={name}
             id={name}
-            className="resize-none w-full px-4 py-2 border text-gray-500 text-xl border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-babyblue-500"
+            className="resize-none w-full px-4 py-2 border text-gray-600 text-md border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-babyblue-500"
             placeholder={placeholder}
             readOnly={readonly}
             value={value}

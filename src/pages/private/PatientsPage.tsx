@@ -60,25 +60,20 @@ const PatientsPage: React.FC = () => {
     }
 
     return (
-        <div className="p-4 flex flex-col gap-5 w-full h-full bg-gray-200">
-            <div className="flex justify-between">
-                <h1 className='text-2xl text-gray-500'>
-                    Patients
-                </h1>
-                <div className="">
-                    <Button name="newPatient" text={TextConstants.NEW_PATIENT} onClick={(e: React.FormEvent) => handleNewPatient(e)} />
-                </div>
+        <div className="p-4 flex flex-col gap-5 w-full h-full">
+            <div className="flex w-32 mx-4">
+                <Button name="newPatient" text={TextConstants.NEW_PATIENT} onClick={(e: React.FormEvent) => handleNewPatient(e)} />
             </div>
 
             <div className='flex px-4'>
-                <div className='flex bg-gray-50 h-10 rounded-lg items-center p-2 w-full'>
+                <div className='flex bg-gray-50 h-10 rounded-md items-center px-2 w-full'>
                     <Checkbox active={showInactive} label="Show inactive" onChange={handleShowInactive} />
                 </div>
             </div>
 
-            <div className="flex flex-wrap w-full p-4 gap-5">
+            <div className="flex flex-wrap w-full px-4 gap-5">
                 {filteredPatients.map((item) => (
-                    <Card text={item.name} url={`${UrlConstants.PATIENTS_URL}/${item.id}`} bgColor={item.active ? "" : "bg-gray-300"}/>
+                    <Card text={item.name} url={`${UrlConstants.PATIENTS_URL}/${item.id}`} bgColor={item.active ? "" : "bg-gray-300"} />
                 ))}
             </div>
 

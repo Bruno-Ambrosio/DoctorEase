@@ -27,7 +27,7 @@ const ComboBox: React.FC<ComboBoxProps> = ({
             id={name}
             value={value}
             onChange={onChange}
-            className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-babyblue-500"
+            className="w-full p-2 border text-gray-600 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-babyblue-500"
         >
             <option aria-readonly={readonly} value="0">{TextConstants.COMBOBOX_PLACEHOLDER}</option>
 

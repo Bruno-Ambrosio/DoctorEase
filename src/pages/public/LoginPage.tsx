@@ -14,6 +14,7 @@ import { InternalConstants } from '../../constants/InternalConstants';
 import { UrlConstants } from '../../constants/UrlConstants';
 import { isBlank, isValidEmail } from '../../utils/Fields';
 import { MessageConstants } from '../../constants/MessageConstants';
+import { ButtonEnum } from '../../enums/ButtonEnum';
 
 interface LoginProps {
     email: string;
@@ -77,7 +78,7 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center w-screen h-screen bg-babyblue-50">
+        <div className="flex items-center justify-center w-screen h-screen bg-gray-200">
             <div className="w-full max-w-md bg-gray-50 rounded-lg shadow-xl p-6">
                 <h3 className="text-3xl font-bold text-babyblue-500 text-center mb-6">
                     Doctor Ease
@@ -95,8 +96,7 @@ const LoginPage: React.FC = () => {
                     </div>
                     <div className="flex flex-col gap-4">
                         <div className="flex justify-between gap-2">
-                            <Button name="signup" text={TextConstants.SIGNUP_BUTTON} onClick={() => { }} />
-                            <Button name="login" text={TextConstants.LOGIN_BUTTON} onClick={(e: React.FormEvent) => handleSubmit(e)} />
+                            <Button name="login" text={TextConstants.LOGIN_BUTTON} onClick={(e: React.FormEvent) => handleSubmit(e)} type={ButtonEnum.Blue}/>
                         </div>
                         <div className="mt-4 flex justify-between">
                             <Link text={TextConstants.FORGOT_PASSWORD_LINK} />
